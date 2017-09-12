@@ -36,6 +36,17 @@ def delta(a, b, match, mismatch):
     
     """
     return match if a is b else mismatch
+    
+def print_matrix(A):
+    """
+    A - a 2d matrix
+    
+    Output - a not-ugly matrix
+    """
+    # print('\n\t'.join(['\t'.join(['{}'.format(int(item)) for item in row]) for row in A]))
+    with open('output.txt', 'w') as fout:
+        print('\n'.join(['\t'.join(['{}'.format(int(item)) for item in row]) for row in A]))
+        fout.write('\n'.join(['\t'.join(['{}'.format(int(item)) for item in row]) for row in A]))
         
     
 def populate_matrices(A, B, MATCH_SCORE, mismatch_score, gap_open, gap_extend):
@@ -57,7 +68,6 @@ def populate_matrices(A, B, MATCH_SCORE, mismatch_score, gap_open, gap_extend):
     m = len(A)
     n = len(B)
     S, D, I = [np.zeros((m + 1, n + 1)) for _ in range(3)]
-    print("S is a {} matrix".format(S.shape))
     
     row_first = m
     column_first = n
@@ -66,33 +76,31 @@ def populate_matrices(A, B, MATCH_SCORE, mismatch_score, gap_open, gap_extend):
     
     score = 0
     
-    #S[m][n] = 0
-    D[m][n] = -(gap_open + gap_extend)
-    I[m][n] = -(gap_open + gap_extend)
+    D[m][n] = -gap_init_penalty
+    I[m][n] = -gap_init_penalty
     
-    for j in reversed(range(n - 1)):
-        #S[m][j] = 0
-        D[m][j] = -(gap_open + gap_extend)
-        I[m][j] = -(gap_open + gap_extend)
+    for i in reversed(range(n)):
+        D[m][i] = -gap_init_penalty
+        I[m][i] = -gap_init_penalty
 
         
-    for i in reversed(range(m - 1)):
-        #S[i][n] = 0
-        D[i][n] = -(gap_open + gap_extend)
-        I[i][n] = -(gap_open + gap_extend)
+    for i in reversed(range(m)):
+        D[i][n] = -gap_init_penalty
+        I[i][n] = -gap_init_penalty
         
-        for j in reversed(range(n - 1)):
+        for j in reversed(range(n)):
             D[i][j] = max(D[i + 1][j] - gap_extend,
-                            S[i + 1][j] - gap_open - gap_extend)
+                            S[i + 1][j] - gap_init_penalty)
             I[i][j] = max(I[i][j + 1] - gap_extend, 
-                            S[i][j + 1] - gap_open - gap_extend)
-            S[i][j] = max(0, S[i + 1][j + 1] + delta(A[i + 1], B[j + 1], MATCH_SCORE, mismatch_score),
+                            S[i][j + 1] - gap_init_penalty)
+            S[i][j] = max(0, S[i + 1][j + 1] + delta(A[i], B[j], MATCH_SCORE, mismatch_score),
                             D[i][j], I[i][j])
             if score < S[i][j]:
                 score = S[i][j]
                 row_first = i
                 column_first = j 
                 
+    print_matrix(I)
     print(S)
         
     
