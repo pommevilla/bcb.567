@@ -38,7 +38,7 @@ def delta(a, b, match, mismatch):
     return match if a is b else mismatch
         
     
-def populate_matrices(A, B, MATCH_SCORE, mismatch, gap_open, gap_extend):
+def populate_matrices(A, B, MATCH_SCORE, mismatch_score, gap_open, gap_extend):
     """
     A, B - two DNA sequences 
     mismatch - a negative integer indicating mismatch scare
@@ -50,28 +50,34 @@ def populate_matrices(A, B, MATCH_SCORE, mismatch, gap_open, gap_extend):
         -D[i][j] is the maximum score of those local alignments that begin with a deletion gap
         -I[i][j] is the maximum score of those local alignments that begin with an insertion gap
         
+    >>> populate_matrices('GATCGTAGAGTGAGACCTAGTGTTTG', 'CTCGTAGGTGAGATTCCTAGTGCC', 10, -20, 40, 2)
+    'SO FAR SO GOOD'
+        
     """
     m = len(A)
     n = len(B)
     S, D, I = [np.zeros((m + 1, n + 1)) for _ in range(3)]
+    print("S is a {} matrix".format(S.shape))
     
     row_first = m
     column_first = n
     
+    gap_init_penalty = gap_open + gap_extend
+    
     score = 0
     
-    S[m][n] = 0
+    #S[m][n] = 0
     D[m][n] = -(gap_open + gap_extend)
     I[m][n] = -(gap_open + gap_extend)
     
     for j in reversed(range(n - 1)):
-        S[m][j] = 0
+        #S[m][j] = 0
         D[m][j] = -(gap_open + gap_extend)
         I[m][j] = -(gap_open + gap_extend)
 
         
     for i in reversed(range(m - 1)):
-        S[i][n] = 0
+        #S[i][n] = 0
         D[i][n] = -(gap_open + gap_extend)
         I[i][n] = -(gap_open + gap_extend)
         
@@ -80,14 +86,14 @@ def populate_matrices(A, B, MATCH_SCORE, mismatch, gap_open, gap_extend):
                             S[i + 1][j] - gap_open - gap_extend)
             I[i][j] = max(I[i][j + 1] - gap_extend, 
                             S[i][j + 1] - gap_open - gap_extend)
-            S[i][j] = max(0, S[i + 1][j + 1] + delta(A[i + 1], B[j + 1]),
+            S[i][j] = max(0, S[i + 1][j + 1] + delta(A[i + 1], B[j + 1], MATCH_SCORE, mismatch_score),
                             D[i][j], I[i][j])
             if score < S[i][j]:
                 score = S[i][j]
                 row_first = i
                 column_first = j 
                 
-    print("Butt")
+    print(S)
         
     
     
@@ -127,4 +133,5 @@ def local_alignment(seq1, seq2, mismatch_score, gap_open, gap_extend):
 """
 
 if __name__ == '__main__':
-    doctest.testmod()
+    #doctest.testmod()
+    populate_matrices('GATCGTAGAGTGAGACCTAGTGTTTG', 'CTCGTAGGTGAGATTCCTAGTGCC', 10, -20, 40, 2)
