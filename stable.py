@@ -114,12 +114,14 @@ def traceback(S, D, I):
 
     
     
-"""
+
 def local_alignment(seq1, seq2, mismatch_score, gap_open, gap_extend):
+    """
 	seq1, seq2 - .txt files in FASTA format
 	mismatch - a negative integer value for mismatch score
 	gap_open - a non-negative integer value for gap_open penalty
 	gap_extend - a positive integer value for gap extension penalty
+    """
     
     
     MATCH_SCORE = 10
@@ -135,7 +137,6 @@ def local_alignment(seq1, seq2, mismatch_score, gap_open, gap_extend):
     
     # print out alignment
     print("Not yet implemented.")
-"""
 
 if __name__ == '__main__':
     doctest.testmod()

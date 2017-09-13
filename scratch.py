@@ -99,22 +99,91 @@ def populate_matrices(A, B, MATCH_SCORE, mismatch_score, gap_open, gap_extend):
                 score = S[i][j]
                 row_first = i
                 column_first = j 
-                
-    print_matrix(I)
-    print(S)
+    
+    with open("output.txt", 'w') as fout:
+        fout.write(''.format(print_matrix(S)))
+    #print(S)
+    
+    return S, D, I
         
     
     
     
     
-def traceback(S, D, I):
+def traceback(S, D, I, A, B, gap_init_penalty):
     """
+    A, B - two DNA sequences
     S, D, I - the three matrices returned by populate_matrices(A, B)
-    
+    gap_init_penalty - a positive integer indicating a penalty for opening a gap
+        
     returns integers i, j, m, n corresponding to the intervals A[i:j] and B[m:n] that give optimal local alignment
+   
+    
     """
-    print("Not yet implemented.")
+    m, n = S.shape
+    print("m -> {}, n -> {}".format(m, n))
+    
+    opt_align = []
+    i = 2
+    j = 1
+    current_mat = 'S'
+    print("A -> {}\nB -> {}".format(A, B))
+    
+    
+    
+    
 
+    #print("max element -> {}".format(S[2][1]))
+    
+    while i <= m and j <= n:
+        if current_mat == 'S':
+            print("Current matrix is S.")
+            print("i -> {}, m -> {}, j -> {}, n -> {}, S[i][j] -> {}".format(i, m, j, n, S[i][j]))
+            print("S[i][j] = {} is D[i][j] = {} - {}".format(S[i][j], D[i][j], S[i][j] is D[i][j]))
+            if i == m - 1 or j == n - 1 or S[i][j] == 0:
+                break
+            if S[i][j] == D[i][j]:
+                print("Current matrix is D.")
+                current_mat = 'D'
+                continue
+            if S[i][j] == I[i][j]:
+                print("Current matrix is I.")   
+                current_mat = 'I'
+                continue
+            opt_align.append((A[i], B[j]))
+            print("Appended {}".format((A[i], B[j])))
+            i += 1
+            j += 1
+            
+        if current_mat == 'D':
+            opt_align.append((A[i], '-'))
+            print("Appended {}".format((A[i], '-')))
+            print("S[i][j] - gap_init_penalty = {} is D[i][j] = {} - {}".format(S[i + 1][j] - gap_init_penalty, D[i][j], S[i + 1][j] - gap_init_penalty is D[i][j]))
+            if i == m - 1 or D[i][j] == S[i + 1][j] - gap_init_penalty:
+                print("Current matrix is S.")
+                current_mat = 'S'
+            i += 1
+            continue
+            
+        if current_mat == 'I':
+            opt_align.append(('-', B[j]))
+            print("Appended {}".format(('-', B[j])))
+            if j == n - 1 or I[i][j] == S[i][j + 1] - gap_init_penalty:
+                print("Current matrix is S.")
+                current_mat = 'S'
+            j += 1
+            continue
+            
+    print(opt_align)
+    row_last = i
+    col_last = j
+    
+    print(S[2][col_last])
+    # print(S[row_first][col_last]) CHANGE LATER AHHHH
+    
+    return (m, n)
+    
+    
     
     
 """
@@ -141,5 +210,10 @@ def local_alignment(seq1, seq2, mismatch_score, gap_open, gap_extend):
 """
 
 if __name__ == '__main__':
-    #doctest.testmod()
-    populate_matrices('GATCGTAGAGTGAGACCTAGTGTTTG', 'CTCGTAGGTGAGATTCCTAGTGCC', 10, -20, 40, 2)
+    doctest.testmod()
+    #populate_matrices('GATCGTAGAGTGAGACCTAGTGTTTG', 'CTCGTAGGTGAGATTCCTAGTGCC', 10, -20, 40, 2)
+    A = read_fasta("A.short.txt")
+    B = read_fasta("B.short.txt")
+    S, D, I = populate_matrices(A, B, 10, -20, 40, 2)
+    gap_init_penalty = 42
+    traceback(S, D, I, A, B, gap_init_penalty)
