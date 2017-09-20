@@ -206,15 +206,11 @@ def local_alignment(seq1, seq2, mismatch_score, gap_open, gap_extend):
 	mismatch - a negative integer value for mismatch score
 	gap_open - a non-negative integer value for gap_open penalty
 	gap_extend - a positive integer value for gap extension penalty
-<<<<<<< HEAD
 	"""
-=======
->>>>>>> 9de993fcb32b797a25f1236e1d021a9a41d9c998
 	
 	
 	MATCH_SCORE = 10
 	# read in FASTA strings, return DNA sequences
-<<<<<<< HEAD
 	A = read_fasta(seq1)
 	B = read_fasta(seq2)
 	
@@ -240,7 +236,6 @@ if __name__ == '__main__':
 	argv[3:] = [int(arg) for arg in argv[3:]]
 	print(argv)
 	local_alignment(*argv[1:])
-=======
 	dna_string1 = read_fasta(seq1)
 	dna_string2 = read_fasta(seq2)
 	
@@ -252,14 +247,3 @@ if __name__ == '__main__':
 	
 	# print out alignment
 	print("Not yet implemented.")
-"""
-
-if __name__ == '__main__':
-	doctest.testmod()
-	#calculate_matrices('GATCGTAGAGTGAGACCTAGTGTTTG', 'CTCGTAGGTGAGATTCCTAGTGCC', 10, -20, 40, 2)
-	A = read_fasta("A.short.txt")
-	B = read_fasta("B.short.txt")
-	S, D, I, max_score, max_score_row, max_score_column = calculate_matrices(A, B, 10, -20, 40, 2)
-	gap_init_penalty = 42
-	traceback(S, D, I, A, B, gap_init_penalty, max_score, max_score_row, max_score_column)
->>>>>>> 9de993fcb32b797a25f1236e1d021a9a41d9c998
