@@ -98,33 +98,7 @@ def calculate_matrices(A, B, MATCH_SCORE, mismatch_score, gap_open, gap_extend):
 		D[m][i] = -gap_init_penalty
 		I[m][i] = -gap_init_penalty
 
-		
-	for i in reversed(range(m)):
-		D[i][n] = -gap_init_penalty
-		I[i][n] = -gap_init_penalty
-		
-		for j in reversed(range(n)):
-			D[i][j] = max(D[i + 1][j] - gap_extend,
-							S[i + 1][j] - gap_init_penalty)
-			I[i][j] = max(I[i][j + 1] - gap_extend, 
-							S[i][j + 1] - gap_init_penalty)
-			S[i][j] = max(0, S[i + 1][j + 1] + delta(A[i], B[j], MATCH_SCORE, mismatch_score),
-							D[i][j], I[i][j])
-			if max_score < S[i][j]:
-				max_score = S[i][j]
-				max_score_row = i
-				max_score_column = j 
-	
-	# with open("output.txt", 'w') as fout:
-		# fout.write(''.format(print_matrix(S)))
-	#print(S)
-	
-	return S, D, I, max_score, max_score_row, max_score_column
-		
-	
-	
-	
-	
+                
 def traceback(S, D, I, A, B, gap_init_penalty, max_score, max_score_row, max_score_column):
 	"""
 	A, B - two DNA sequences
@@ -232,11 +206,15 @@ def local_alignment(seq1, seq2, mismatch_score, gap_open, gap_extend):
 	mismatch - a negative integer value for mismatch score
 	gap_open - a non-negative integer value for gap_open penalty
 	gap_extend - a positive integer value for gap extension penalty
+<<<<<<< HEAD
 	"""
+=======
+>>>>>>> 9de993fcb32b797a25f1236e1d021a9a41d9c998
 	
 	
 	MATCH_SCORE = 10
 	# read in FASTA strings, return DNA sequences
+<<<<<<< HEAD
 	A = read_fasta(seq1)
 	B = read_fasta(seq2)
 	
@@ -262,3 +240,26 @@ if __name__ == '__main__':
 	argv[3:] = [int(arg) for arg in argv[3:]]
 	print(argv)
 	local_alignment(*argv[1:])
+=======
+	dna_string1 = read_fasta(seq1)
+	dna_string2 = read_fasta(seq2)
+	
+	# compute dynamic programming matrices
+	S, D, I = populatate_matrices(dna_string1, dna_string2, MATCH_SCORE, mismatch_score, gap_open, gap_extend)
+	
+	# trace back optimal alignment through matrices
+	opt_align = traceback(S, D, I)
+	
+	# print out alignment
+	print("Not yet implemented.")
+"""
+
+if __name__ == '__main__':
+	doctest.testmod()
+	#calculate_matrices('GATCGTAGAGTGAGACCTAGTGTTTG', 'CTCGTAGGTGAGATTCCTAGTGCC', 10, -20, 40, 2)
+	A = read_fasta("A.short.txt")
+	B = read_fasta("B.short.txt")
+	S, D, I, max_score, max_score_row, max_score_column = calculate_matrices(A, B, 10, -20, 40, 2)
+	gap_init_penalty = 42
+	traceback(S, D, I, A, B, gap_init_penalty, max_score, max_score_row, max_score_column)
+>>>>>>> 9de993fcb32b797a25f1236e1d021a9a41d9c998
