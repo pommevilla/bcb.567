@@ -1,5 +1,4 @@
 import doctest
-import numpy as np
 from sys import argv
 
 def read_fasta(seq):
@@ -236,11 +235,13 @@ if __name__ == '__main__':
 	argv[3:] = [int(arg) for arg in argv[3:]]
 	print(argv)
 	local_alignment(*argv[1:])
+	
+	
 	dna_string1 = read_fasta(seq1)
 	dna_string2 = read_fasta(seq2)
 	
 	# compute dynamic programming matrices
-	S, D, I = populatate_matrices(dna_string1, dna_string2, MATCH_SCORE, mismatch_score, gap_open, gap_extend)
+	S, D, I = calculate_matrices(dna_string1, dna_string2, MATCH_SCORE, mismatch_score, gap_open, gap_extend)
 	
 	# trace back optimal alignment through matrices
 	opt_align = traceback(S, D, I)
