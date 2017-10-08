@@ -1,3 +1,4 @@
-*.pdf
-output.txt
-__pycache__
+**/*.pdf
+**/output.txt
+**/__pycache__
+**/*.pyc
