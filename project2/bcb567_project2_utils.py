@@ -63,16 +63,28 @@ def calc_word_code(dnastring):
     returns a number representing the decimal value of the dnastring
     
     >>> calc_word_code('ACTA')
-    52
+    28
     
     >>> calc_word_code('ACTNGTA')
     -1
     
+    >>> calc_word_code('TCGAGC')
+    3465
+    
     >>> calc_word_code('ACATTN')
+    -1
+    
+    >>> calc_word_code('AN')
     -1
     
     >>> calc_word_code('TT')
     15
+    
+    >>> calc_word_code('CA')
+    4
+    
+    >>> calc_word_code('TC')
+    13
     """
     value_map = {   'A': 0,
                     'C': 1,
@@ -83,15 +95,26 @@ def calc_word_code(dnastring):
     values = []
     for char in dnastring:
         if char not in value_map:
-            return int(-1)
+            return -1
         else:
             values.append(value_map[char])
             
     word_code = 0
     for n, value in enumerate(values):
-        word_code += value * (4 ** n)
+        word_code += value * (4 ** (len(values) - n - 1))
 
-    print word_code 
-
+    return word_code 
+def create_word_code_array(dnastring, wlength):
+    '''
+    >>> create_word_code_array('CATCGTGANATCGTGTN', 2)
+    [4, 3, 13, 6, 11, 14, 8, -1, -1, 3, 13, 6, 11, 14, 11, -1, -1]
+    '''
+    word_code_array = []
+    for i in range(0, len(dnastring)):
+        chunk = dnastring[i: i + wlength]
+        code = -1 if len(chunk) < wlength else calc_word_code(chunk)
+        word_code_array.append(code)
+        
+    return word_code_array
 if __name__ == "__main__":
 	doctest.testmod()
