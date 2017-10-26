@@ -2,39 +2,50 @@ import unittest
 import bcb567_project2_classes as bcbclasses
 import bcb567_project2_utils as bcbutils
 
-class SuperwordCodeTesting(unittest.TestCase):
+class SuperwordTesting(unittest.TestCase):
     def setUp(self):
-        self.a = bcbclasses.SuperwordCode(3, (2, 3, 4))
-        self.b = bcbclasses.SuperwordCode(3, (2, 3, 4))
-        self.c = bcbclasses.SuperwordCode(7, (-1, 5, 10))
-        self.d = bcbclasses.SuperwordCode(9, (-1, 3, 10))
-        self.e = bcbclasses.SuperwordCode(6, (-1, -1, 3))
-        self.f = bcbclasses.SuperwordCode(10, (-1, 4, 3))
-        self.x = (3, 2, 1) 
+        word_model = bcbutils.read_word_model('word_model_3.txt')
+        dna_string = bcbutils.read_fasta_file('D.short.txt')
+        wlcut = 3
+        self.superword_array_1 = bcbclasses.SuperwordArray(dna_string, word_model, wlcut)
         
-    def test_superwordcode_eq(self):
-        self.assertTrue(self.a == self.b)
-        self.assertFalse(self.a != self.b)
-        self.assertFalse(self.a == self.c)
-        with self.assertRaises(AssertionError):
-            self.assertTrue(self.a == self.x)
-        
-    def test_superwordcode_neq(self):
-        self.assertFalse(self.a != self.b)
-        self.assertTrue(self.c != self.d)
-        self.assertTrue(self.a != self.c)
-        self.assertTrue(self.b != self.c)
-        with self.assertRaises(AssertionError):
-            self.assertTrue(self.b != self.x)
-            
-    # def test_superwordcode_lt(self):
-        # self.assertTrue(self.c < self.d)
-        # self.assertFalse(self.a < self.f)
-        # self.assertTrue(self.e < self.b)
-        # self.assertTrue(self.c < self.f)
+    # def test_superwordcode_eq(self):
+        # self.assertTrue(self.a == self.b)
+        # self.assertFalse(self.a != self.b)
+        # self.assertFalse(self.a == self.c)
         # with self.assertRaises(AssertionError):
-            # self.assertTrue(self.b < self.x)
+            # self.assertTrue(self.a == self.x)
+        
+    # def test_superwordcode_neq(self):
+        # self.assertFalse(self.a != self.b)
+        # self.assertTrue(self.c != self.d)
+        # self.assertTrue(self.a != self.c)
+        # self.assertTrue(self.b != self.c)
+        # with self.assertRaises(AssertionError):
+            # self.assertTrue(self.b != self.x)
+            
+            
+    def test_word_code_array(self):
+        # print self.superword_array_1.word_code_array
+        self.assertTrue(self.superword_array_1.word_code_array == [4, 3, 13, 6, 11, 14, 8, -1, -1, 3, 13, 6, 11, 14, 11, -1, -1])
+        
+    def test_largest_block_info(self):
+        self.assertTrue(self.superword_array_1.max_block_start == 5)
+        self.assertTrue(self.superword_array_1.max_block_end == 6)
+        self.assertTrue(self.superword_array_1.max_block_size == 2)
+        self.assertTrue(self.superword_array_1.max_block_superword == (3, 6, 14))
+        
+        
+    def test_get_superword_code(self):
+        # print self.superword_array_1.get_superword_code(1)
+        self.assertTrue(self.superword_array_1.get_superword_code(1) == (3, 6, 14))
+        self.assertTrue(self.superword_array_1.get_superword_code(16) == (-1, -1, -1))
+        self.assertTrue(self.superword_array_1.get_superword_code(9) == (3, 6, 14))
+        self.assertTrue(self.superword_array_1.get_superword_code(13) == (14, -1, -1))
+        
+            
+
             
             
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(verbosity = 2)

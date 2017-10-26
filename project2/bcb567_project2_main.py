@@ -18,11 +18,9 @@ def superword_driver(args):
 	"""
 	
 	dnastring = bcbclasses.DNAString(*bcbutils.read_fasta_file(args[1]))
-
+    
 	wlcut = int(args[3])
 	
-	AB_optimal_alignment = bcbclasses.LocalAlignment(A, B, MATCH_SCORE, mismatch_score, gap_open_penalty, gap_extend_penalty)
-	return AB_optimal_alignment
 	
 if __name__ == "__main__":
 	optimal_alignment = local_alignment_driver(argv)
