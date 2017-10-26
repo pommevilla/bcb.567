@@ -9,61 +9,14 @@
 import doctest
 import bcb567_project2_utils as bcbutils
 
-class DNAString:
-    """
-    Represents a DNA sequence with a header.  
-    """
-
-    def __init__(self, header, seq):
-        self.header = header
-        self.seq = seq
-       
-    @property
-    def length(self):
-        """
-        >>> string1 = bcbutils.read_fasta_file("A.short.txt")
-        >>> A = DNAString(*string1)
-        >>> A.length
-        26
-        """
-        return len(self.seq)
-        
-    def __len__(self):
-        return len(self.seq)
-
-    def __iter__(self):
-        self.current = 0
-        return self
-        
-    def __next__(self):
-        if self.current == self.length - 1:
-            raise StopIteration
-        else:
-            self.current = self.current + 1
-            return self.seq[self.current]
-            
-    def __getitem__(self, i):
-        """
-        >>> string1 = bcbutils.read_fasta_file("A.short.txt")
-        >>> A = DNAString(*string1)
-        >>> print(A[0])
-        G
-        """
-        return self.seq[i]
-    
-    def __str__(self):
-        """
-        >>> string1 = bcbutils.read_fasta_file("A.short.txt")
-        >>> A = DNAString(*string1)
-        >>> print(A)
-        Ashort
-        GATCGTAGAGTGAGACCTAGTGTTTG
-        """
-        return "{}\n{}".format(self.header, self.seq)
-
 class SuperwordArray:
 
     def __init__(self, dnastring, word_model, wlcut):
+        '''
+            dnastring - a tuple (h, s) containing a header h and a dna string s
+            word_model - a sequence of 1s and 0s
+            wlcut - an integer
+        '''
         self.dnastring = dnastring
         self.word_code_array = bcbutils.create_word_code_array(dnastring[1], word_model) 
         self.word_model = word_model
@@ -72,12 +25,14 @@ class SuperwordArray:
         self.sorted_superwords = bcbutils.create_superword_array(self.word_code_array, self.wlength, self.wlcut)
         self.max_block_start, self.max_block_end, self.max_block_size, self.max_block_superword = self.find_largest_block()
         
-        
-        
-
-        
     def get_superword_code(self, pos):
         '''
+        inputs:
+            pos - the position that we want the superword array from
+            
+        output:
+            returns the superword code of word level wlcut starting at position pos in self.word_code_array
+        
         >>> wca = [4, 3, 13, 6, 11, 14, 8, -1, -1, 3, 13, 6, 11, 14, 11, -1, -1]
         >>> get_superword_code(wca, 1, 2, 3)
         (3, 6, 14)
@@ -88,10 +43,7 @@ class SuperwordArray:
         >>> get_superword_code(wca, 7, 2, 4)
         (-1, 3, 6, 14)
         
-        >>> get_
         '''
-        
-
         
         wlevel = 0
         n = len(self.word_code_array)
@@ -106,6 +58,20 @@ class SuperwordArray:
         return tuple(superword_code)
         
     def find_largest_block(self):
+        '''
+        A block in superword array is a subsequence of self.sorted_superwords where each index corresponds
+        to the same superword.
+        
+        find_largest_block returns information about the first largest block found in self.sorted_superwords.
+        
+        output:
+            Let M be the largest block of self.sorted_superwords
+            max_block_start - the beginning in self.sorted_superwords of M
+            max_block_end - the end in self.sorted_superwords of M
+            max_block_size - the number of elements in M
+            max_block_superword - the superword code associated with M
+            
+        '''
             
         max_block_size = 0
         max_block_start = 0
@@ -149,9 +115,9 @@ class SuperwordArray:
         inputinfo = "{:>40}: {}\n{:>40}: {}".format("Word model", self.word_model, "wlcut", self.wlcut)
         
         blockinfo = "{:>40}: {}".format("Number of positions in largest block", self.max_block_size)
-        
-        positioninfo = "{:>40}: {}".format("Positions in largest block", ' '.join([str(self.sorted_superwords[i]) for i in range(self.max_block_start - 1, self.max_block_end)]))
+        superwordarrayinfo = "{:>40}: {}".format("Positions in superword array", ''.join(['{:>5}'.format(str(i + 1)) for i in range(self.max_block_start - 1, self.max_block_end)]))
+        positioninfo = "{:>40}: {}".format("Positions in largest block", ''.join(['{:>5}'.format(str(self.sorted_superwords[i])) for i in range(self.max_block_start - 1, self.max_block_end)]))
         superwordinfo = "{:>40}: {}".format("Superword of largest block", self.max_block_superword)
         
-        return '\n'.join([inputinfo, blockinfo, positioninfo, superwordinfo])
+        return '\n'.join([inputinfo, blockinfo, superwordarrayinfo, positioninfo, superwordinfo])
  

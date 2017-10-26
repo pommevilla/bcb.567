@@ -13,6 +13,15 @@ from sys import argv
 
 
 def superword_array_driver(args):
+    '''
+    inputs:
+        args - user input of the form "file1, file2, wlcut", where
+        file1 - a .txt file in fasta format 
+        file2 - a .txt file containing a string of 1s and 0s on a single line
+        wlcut - an integer
+	
+	returns a SuperwordArray object create from the inputs
+    '''
     dnastring = bcbutils.read_fasta_file(args[1])
     word_model = bcbutils.read_word_model(args[2])
     wlcut = int(args[3])
