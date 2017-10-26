@@ -1,9 +1,9 @@
 '''
-	File name: bcb567_project1_utils.py
-	Author: Paul Villanueva
-	Date created: 9/13/2017
-	Date last modified: 9/20/2017
-	Python Version: 3.6
+    File name: bcb567_project2_utils.py
+    Author: Paul Villanueva
+    Date created: 10/7/2017
+    Date last modified: 10/26/2017
+    Python Version: 2.7
 '''
 
 import doctest
