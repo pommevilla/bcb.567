@@ -112,12 +112,15 @@ class SuperwordArray:
         
         
     def __str__(self):
-        inputinfo = "{:>40}: {}\n{:>40}: {}".format("Word model", self.word_model, "wlcut", self.wlcut)
+        inputinfo = "{:>40}: {:>4}\n{:>40}: {:>4}".format("Word model", self.word_model, "wlcut", self.wlcut)
         
-        blockinfo = "{:>40}: {}".format("Number of positions in largest block", self.max_block_size)
-        superwordarrayinfo = "{:>40}: {}".format("Positions in superword array", ''.join(['{:>5}'.format(str(i + 1)) for i in range(self.max_block_start - 1, self.max_block_end)]))
-        positioninfo = "{:>40}: {}".format("Positions in largest block", ''.join(['{:>5}'.format(str(self.sorted_superwords[i])) for i in range(self.max_block_start - 1, self.max_block_end)]))
-        superwordinfo = "{:>40}: {}".format("Superword of largest block", self.max_block_superword)
+        blockinfo = "{:>40}: {:>4}".format("Number of positions in largest block", self.max_block_size)
+        
+        superwordarrayinfo = "{:>40}: {}".format("Positions in superword array", ''.join(['{:>4}'.format(str(i + 1)) for i in range(self.max_block_start - 1, self.max_block_end)]))
+        
+        positioninfo = "{:>40}: {}".format("Positions in largest block", ''.join(['{:>4}'.format(str(self.sorted_superwords[i])) for i in range(self.max_block_start - 1, self.max_block_end)]))
+        
+        superwordinfo = "{:>40}:   {}".format("Superword of largest block", self.max_block_superword)
         
         return '\n'.join([inputinfo, blockinfo, superwordarrayinfo, positioninfo, superwordinfo])
  
