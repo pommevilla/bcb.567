@@ -1,6 +1,6 @@
 # BCB 567
 
-My homework submissions for Iowa State University's BCB 567 class.  Code written in Python 2.7.
+Homework submissions for Iowa State University's BCB 567 class.  Code written in Python 2.7.
 
 ## Projects
 
